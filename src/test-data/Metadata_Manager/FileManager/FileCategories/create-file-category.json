@@ -1,0 +1,12 @@
+{
+  "validFileCategory": {
+    "name": "Auto",
+    "description": "This is for Automation purpose",
+    "fileType": "Document"
+  },
+  "editFileCategory": {
+    "name": "Edit",
+    "description": "This is for Edit purpose",
+    "fileType": "Image"
+  }
+}

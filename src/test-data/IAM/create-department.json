@@ -1,0 +1,10 @@
+{
+  "newDepartment": {
+    "description": "some value",
+    "is_admin": false,
+    "label": "abcd",
+    "name": "abcd",
+    "parent_department_id": "38d6f2e8-8e42-4a97-98e7-09aa8b8e19bc",
+    "status": "ACTIVE"
+  }
+}

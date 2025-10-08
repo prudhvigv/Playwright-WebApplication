@@ -1,0 +1,14 @@
+[
+  {
+      "case_id":"API-1",
+      "title":"progress day 2",
+      "note":"<p>Issue confirmed on production environment. Log review points to malformed CSV input.<\/p>",
+      "attachment":null
+  },
+  {
+      "case_id":"API-2",
+      "title":"progress day 3",
+      "note":"<p>Developer assigned to fix parser logic in import module (ETA: 2 days).<\/p>",
+      "attachment":null
+  }
+]

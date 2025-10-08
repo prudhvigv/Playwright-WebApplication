@@ -1,0 +1,530 @@
+stages:
+  - test
+  - notify
+
+variables:
+  TENANT_TO_EXECUTE_UI_TESTS:
+    value: "TEST_AUTOMATION_1"
+    options:
+      - "MAVQ_QA1"
+      - "TEST_AUTOMATION_1"
+      - "Custom_Data"
+    description: "Select the environment for UI tests"
+
+  TEST_CREDENTIAL_SET:
+    value: "USER_CREDENTIALS_1"
+    options:
+      - "USER_CREDENTIALS_1"
+      - "USER_CREDENTIALS_2"
+    description: "Select the credential set for the tests execution"
+
+# Custom_Data variables (only used if TENANT_TO_EXECUTE_UI_TESTS=Custom_Data)
+  BASE_URL: ""
+  ADMIN_USERMAIL: ""
+  ADMIN_PASSWORD: ""
+  STANDARD_USERMAIL: ""
+  STANDARD_PASSWORD: ""
+
+  SPEC_SUITE:
+    value: "BasicDetails" # Default selection, must be present in options
+    options:
+      - "UI"
+      - "API"
+      - "ContentManagement-Consumption"
+      - "DataTable-Consumption"
+      - "Sanity"
+      - "Content-Intake"
+      - "Content-Request"
+      - "Assignments"
+      - "BasicDetails"
+      - "FieldTypes"
+      - "FileCategories"
+      - "File"
+      - "Folder"
+      - "RecycleBin"
+      - "SharedWithMe"
+      - "VaultHub"
+      - "SharedVault"
+      - "CreateDepartment"   
+    description: "Select which suite of tests to run"
+
+
+  TENANT_TO_EXECUTE_API_TESTS:
+    value: "TEST-AUTOMATION-1"
+    options:
+      - "CMM-V2"
+      - "QA"
+      - "TEST-AUTOMATION-1"
+    description: "Select the environment for the API tests"
+
+  EMAIL_TRIGGER_MODE:
+    value: "false"
+    options:
+      - "true"
+      - "false"
+    description: "Set the email trigger mode if set to True mail will be triggered to recipients else the email will not be sent"
+
+# Email notification configuration
+  EMAIL_RECIPIENTS:
+    value: ""
+    description: "Enter the email recipients separated by a comma"
+  SMTP_SERVER: "smtp.gmail.com"  # Gmail: smtp.gmail.com | Outlook: smtp-mail.outlook.com | Yahoo: smtp.mail.yahoo.com
+  SMTP_PORT: "587"               # Gmail: 587 | Outlook: 587 | Yahoo: 587 | Custom SMTP: check provider
+  EMAIL_FROM: ""
+  EMAIL_PASSWORD: ""             # For Gmail: Use App-specific password (16 chars) | Others: regular password or app password
+  EMAIL_SUBJECT: "Test Execution Report - ${CI_PIPELINE_ID}"
+  ATTACH_REPORTS: "true"         # Set to "false" to send email without attachments (avoids Gmail security blocks)
+
+playwright-tests:
+  image: mcr.microsoft.com/playwright:v1.44.0-jammy
+  stage: test
+  variables:
+    NODE_ENV: test
+  before_script:
+    - apt-get update && apt-get install -y jq
+    - npm install
+    - npx playwright install --with-deps
+
+    # If MAVQ_QA1 or TEST-AUTOMATION-1 → load from JSON
+    - |
+      if [ "$TENANT_TO_EXECUTE_UI_TESTS" = "MAVQ_QA1" ] || [ "$TENANT_TO_EXECUTE_UI_TESTS" = "TEST_AUTOMATION_1" ]; then
+        echo "Loading configuration for $TENANT_TO_EXECUTE_UI_TESTS environment"
+        
+        # Debug: Show all environment variables that might be relevant
+        echo "🔍 Debugging environment variables:"
+        echo "TENANT_TO_EXECUTE_UI_TESTS = '$TENANT_TO_EXECUTE_UI_TESTS'"
+        
+        # Debug: Check if the variable exists in environment
+        echo "🔍 Checking if variable '$TENANT_TO_EXECUTE_UI_TESTS' exists:"
+        if [ -n "${!TENANT_TO_EXECUTE_UI_TESTS+x}" ]; then
+          echo "✅ Variable '$TENANT_TO_EXECUTE_UI_TESTS' exists"
+          echo "📝 Content preview: '${!TENANT_TO_EXECUTE_UI_TESTS:0:100}...'"
+        else
+          echo "❌ Variable '$TENANT_TO_EXECUTE_UI_TESTS' does not exist"
+          echo "🔍 Available variables containing 'TEST' or 'MAVQ_QA1':"
+          env | grep -E "(TEST|MAVQ_QA1|AUTOMATION)" | head -10
+          echo "🔍 All CI variables:"
+          env | grep "^CI_" | head -5
+        fi
+        
+        # Try different methods to access the variable
+        echo "🔍 Trying different access methods:"
+        
+        # Method 1: Direct access
+        echo "Method 1 - Direct: \$$TENANT_TO_EXECUTE_UI_TESTS"
+        CONFIG_JSON_1=$(eval echo \$$TENANT_TO_EXECUTE_UI_TESTS)
+        echo "Result 1: '${CONFIG_JSON_1:0:50}...'"
+        
+        # Method 2: Using printenv
+        echo "Method 2 - printenv:"
+        CONFIG_JSON_2=$(printenv "$TENANT_TO_EXECUTE_UI_TESTS" 2>/dev/null || echo "")
+        echo "Result 2: '${CONFIG_JSON_2:0:50}...'"
+        
+        # Method 3: Check if it's a CI/CD variable with different name
+        echo "Method 3 - Check common variations:"
+        for var_name in "$TENANT_TO_EXECUTE_UI_TESTS" "CI_$TENANT_TO_EXECUTE_UI_TESTS" "${TENANT_TO_EXECUTE_UI_TESTS}_CONFIG" "CONFIG_$TENANT_TO_EXECUTE_UI_TESTS"; do
+          if [ -n "${!var_name+x}" ]; then
+            echo "✅ Found: $var_name"
+            CONFIG_JSON_3="${!var_name}"
+            break
+          fi
+        done
+        
+        # Use the first non-empty result
+        CONFIG_JSON=""
+        if [ -n "$CONFIG_JSON_1" ]; then
+          CONFIG_JSON="$CONFIG_JSON_1"
+          echo "✅ Using Method 1 result"
+        elif [ -n "$CONFIG_JSON_2" ]; then
+          CONFIG_JSON="$CONFIG_JSON_2"
+          echo "✅ Using Method 2 result"
+        elif [ -n "$CONFIG_JSON_3" ]; then
+          CONFIG_JSON="$CONFIG_JSON_3"
+          echo "✅ Using Method 3 result"
+        else
+          echo "❌ All methods failed to retrieve the variable"
+          echo "💡 Please check:"
+          echo "   1. Variable name is exactly 'TEST_AUTOMATION_1'"
+          echo "   2. Variable is not protected (if running on non-protected branch)"
+          echo "   3. Variable scope includes this job"
+          exit 1
+        fi
+        
+        echo "$CONFIG_JSON" > config.json
+        
+        # Debug: Show raw file content
+        echo "Raw config file content:"
+        cat config.json
+        echo "--- End of raw content ---"
+        
+        # Validate JSON before proceeding
+        if ! cat config.json | jq '.' > /dev/null 2>&1; then
+          echo "❌ Invalid JSON in variable '$TENANT_TO_EXECUTE_UI_TESTS'"
+          echo "❌ Please check the GitLab CI variable content"
+          exit 1
+        fi
+        
+        # Debug: Show parsed JSON
+        echo "Parsed JSON content:"
+        cat config.json | jq '.'
+        
+        # Extract values using jq
+        BASE_URL=$(jq -r '.BASE_URL' config.json)
+        ADMIN_USERMAIL=$(jq -r --arg cred "$TEST_CREDENTIAL_SET" '.[$cred].ADMIN_USERMAIL' config.json)
+        ADMIN_PASSWORD=$(jq -r --arg cred "$TEST_CREDENTIAL_SET" '.[$cred].ADMIN_PASSWORD' config.json)
+        STANDARD_USERMAIL=$(jq -r --arg cred "$TEST_CREDENTIAL_SET" '.[$cred].STANDARD_USERMAIL' config.json)
+        STANDARD_PASSWORD=$(jq -r --arg cred "$TEST_CREDENTIAL_SET" '.[$cred].STANDARD_PASSWORD' config.json)
+        
+        # Export variables for the environment
+        export BASE_URL
+        export ADMIN_USERMAIL
+        export ADMIN_PASSWORD
+        export STANDARD_USERMAIL
+        export STANDARD_PASSWORD
+        export USER_CREDENTIAL
+        
+        echo "Loaded values:"
+        echo "BASE_URL: $BASE_URL"
+        echo "USER_CREDENTIAL: $USER_CREDENTIAL"
+        echo "ADMIN_USERMAIL: $ADMIN_USERMAIL"
+        echo "STANDARD_USERMAIL: $STANDARD_USERMAIL"
+        
+      else
+        echo "Using Custom_Data variables"
+        export BASE_URL
+        export ADMIN_USERMAIL
+        export ADMIN_PASSWORD
+        export STANDARD_USERMAIL
+        export STANDARD_PASSWORD
+        
+        echo "Custom values:"
+        echo "BASE_URL: $BASE_URL"
+        echo "ADMIN_USERMAIL: $ADMIN_USERMAIL"
+        echo "STANDARD_USERMAIL: $STANDARD_USERMAIL"
+      fi
+
+    # Validate that required variables are set
+    - |
+      if [ -z "$BASE_URL" ] || [ "$BASE_URL" = "null" ]; then
+        echo "❌ BASE_URL is not set or null"
+        exit 1
+      fi
+      if [ -z "$ADMIN_USERMAIL" ] || [ "$ADMIN_USERMAIL" = "null" ]; then
+        echo "❌ ADMIN_USERMAIL is not set or null"
+        exit 1
+      fi
+
+    # Generate .env for Playwright (backup method)
+    - echo "BASE_URL=$BASE_URL" >> .env
+    - echo "ADMIN_USERMAIL=$ADMIN_USERMAIL" >> .env
+    - echo "ADMIN_PASSWORD=$ADMIN_PASSWORD" >> .env
+    - echo "STANDARD_USERMAIL=$STANDARD_USERMAIL" >> .env
+    - echo "STANDARD_PASSWORD=$STANDARD_PASSWORD" >> .env
+    - echo "USER_CREDENTIAL=$USER_CREDENTIAL" >> .env
+    
+    # Debug: Show final .env content
+    - echo "Final .env file content:"
+    - cat .env
+
+    # Map SPEC_SUITE dropdown to actual spec files
+    - |
+      if [ "$SPEC_SUITE" = "UI" ]; then
+        export TESTS="tests/UI/"
+        export TEST_COMMAND="npm run test"
+      elif [ "$SPEC_SUITE" = "API" ]; then
+        export TESTS="tests/API/"
+        export TEST_COMMAND="npm run test"
+      elif [ "$SPEC_SUITE" = "ContentManagement-Consumption" ]; then
+        export TESTS="Assignments.spec ContentIntake.spec ContentRequest.spec File.spec Folder.spec RecycleBin.spec SharedWithMe.spec VaultHub.spec SharedVault.spec"
+        export TEST_COMMAND="npm run test"
+      elif [ "$SPEC_SUITE" = "DataTable-Consumption" ]; then
+        export TESTS="DataTable.spec"
+        export TEST_COMMAND="npm run test"
+      elif [ "$SPEC_SUITE" = "Sanity" ]; then
+        export TESTS=""
+        export TEST_COMMAND="npm run test:sanity"
+      elif [ "$SPEC_SUITE" = "Smoke" ]; then
+        export TESTS=""
+        export TEST_COMMAND="npm run test:smoke"
+      elif [ "$SPEC_SUITE" = "Content-Intake" ]; then
+        export TESTS="ContentIntake.spec"
+        export TEST_COMMAND="npm run test"
+      elif [ "$SPEC_SUITE" = "Content-Request" ]; then
+        export TESTS="ContentRequest.spec"
+      elif [ "$SPEC_SUITE" = "Assignments" ]; then
+        export TESTS="Assignments.spec"
+      elif [ "$SPEC_SUITE" = "BasicDetails" ]; then
+        export TESTS="BasicDetails.spec"
+      elif [ "$SPEC_SUITE" = "FieldTypes" ]; then
+        export TESTS="FieldTypes.spec"
+      elif [ "$SPEC_SUITE" = "FileCategories" ]; then
+        export TESTS="FileCategories.spec"
+      elif [ "$SPEC_SUITE" = "File" ]; then
+        export TESTS="File.spec"
+      elif [ "$SPEC_SUITE" = "Folder" ]; then
+        export TESTS="Folder.spec"
+      elif [ "$SPEC_SUITE" = "RecycleBin" ]; then
+        export TESTS="RecycleBin.spec"
+      elif [ "$SPEC_SUITE" = "SharedWithMe" ]; then
+        export TESTS="SharedWithMe.spec"
+      elif [ "$SPEC_SUITE" = "VaultHub" ]; then
+        export TESTS="VaultHub.spec"
+      elif [ "$SPEC_SUITE" = "SharedVault" ]; then
+        export TESTS="SharedVault.spec"
+      elif [ "$SPEC_SUITE" = "CreateDepartment" ]; then
+        export TESTS="CreateDepartment.spec"
+      else
+        export TESTS="**/*.spec.ts"
+        export TEST_COMMAND="npm run test"
+      fi
+
+  script:
+    - echo "Running tests in ENV=$TENANT_TO_EXECUTE_UI_TESTS"
+    - |
+      if [ "$SPEC_SUITE" = "Sanity" ] || [ "$SPEC_SUITE" = "Smoke" ]; then
+        echo "Running $SPEC_SUITE tests with command: $TEST_COMMAND"
+        $TEST_COMMAND
+      else
+        echo "Running $SPEC_SUITE tests with pattern: $TESTS"
+        npm run test $TESTS
+      fi
+
+  artifacts:
+    when: always
+    paths:
+      - my-report/
+    expire_in: 1 week
+
+notify:
+  stage: notify
+  image: python:3.9-slim
+  when: always
+  rules:
+    - if: '$EMAIL_TRIGGER_MODE == "true"'
+  dependencies:
+    - playwright-tests
+  before_script:
+    - apt-get update && apt-get install -y zip
+  script:
+    - |
+      # Check if email configuration is provided
+      if [ -z "$EMAIL_RECIPIENTS" ] || [ -z "$EMAIL_FROM" ] || [ -z "$EMAIL_PASSWORD" ]; then
+        echo "⚠️  Email configuration not provided. Skipping email notification."
+        echo "Please set EMAIL_RECIPIENTS, EMAIL_FROM, and EMAIL_PASSWORD variables."
+        exit 0
+      fi
+
+      # Create email notification script
+      cat > send_email.py << 'EOF'
+      import smtplib
+      import os
+      import zipfile
+      from email.mime.multipart import MIMEMultipart
+      from email.mime.text import MIMEText
+      from email.mime.base import MIMEBase
+      from email import encoders
+      from datetime import datetime
+      import sys
+
+      def create_report_archive():
+          """Create a zip archive containing all test reports"""
+          archive_name = f"test-reports-{os.environ.get('CI_PIPELINE_ID', 'unknown')}.zip"
+          
+          with zipfile.ZipFile(archive_name, 'w', zipfile.ZIP_DEFLATED) as zipf:
+              # Add report if exists
+              if os.path.exists('my-report'):
+                  for root, dirs, files in os.walk('my-report'):
+                      for file in files:
+                          file_path = os.path.join(root, file)
+                          arcname = os.path.relpath(file_path, '.')
+                          zipf.write(file_path, arcname)
+          
+          return archive_name
+
+      def send_email():
+          try:
+              # Email configuration
+              smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+              smtp_port = int(os.environ.get('SMTP_PORT', '587'))
+              email_from = os.environ['EMAIL_FROM']
+              email_password = os.environ['EMAIL_PASSWORD']
+              email_recipients = [email.strip() for email in os.environ['EMAIL_RECIPIENTS'].split(',')]
+              email_subject = os.environ.get('EMAIL_SUBJECT', f"Test Execution Report - {os.environ.get('CI_PIPELINE_ID', 'unknown')}")
+              
+              print(f"📧 Sending email from: {email_from}")
+              print(f"📧 SMTP Server: {smtp_server}:{smtp_port}")
+              print(f"📧 Recipients: {', '.join(email_recipients)}")
+              
+              # Create message
+              msg = MIMEMultipart()
+              msg['From'] = email_from
+              msg['To'] = ', '.join(email_recipients)
+              msg['Subject'] = email_subject
+              
+              # Email body
+              pipeline_url = os.environ.get('CI_PIPELINE_URL', 'N/A')
+              commit_sha = os.environ.get('CI_COMMIT_SHA', 'N/A')
+              commit_message = os.environ.get('CI_COMMIT_MESSAGE', 'N/A')
+              job_url = os.environ.get('CI_JOB_URL', 'N/A')
+              
+              body = f"""
+              Hi Team,
+
+              Please find the Test Execution Report attached and below are the details of the pipeline run:
+              
+              Pipeline Details:
+              - Pipeline ID: {os.environ.get('CI_PIPELINE_ID', 'N/A')}
+              - Pipeline URL: {pipeline_url}
+              - Job URL: {job_url}
+              - Execution Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+              - Environment: {os.environ.get('TENANT_TO_EXECUTE_UI_TESTS', 'N/A')}
+              - Test Suites executed: {os.environ.get('SPEC_SUITE', 'N/A')}
+              
+              This email contains the test reports as attachments:
+              - Test Report
+              
+              Please extract the attached zip file to view the detailed test results.
+              
+              Best regards,
+              GitLab CI/CD Pipeline
+              """
+              
+              msg.attach(MIMEText(body, 'plain'))
+              
+              # Handle report attachments based on configuration
+              attach_reports = os.environ.get('ATTACH_REPORTS', 'true').lower() == 'true'
+              archive_name = create_report_archive()
+              attachment_added = False
+              
+              if attach_reports and os.path.exists(archive_name):
+                  file_size = os.path.getsize(archive_name)
+                  file_size_mb = file_size / (1024 * 1024)
+                  
+                  print(f"📦 Report archive size: {file_size_mb:.2f} MB")
+                  
+                  # Gmail has a 25MB attachment limit, but we'll be more conservative
+                  if file_size_mb <= 20:
+                      try:
+                          with open(archive_name, "rb") as attachment:
+                              part = MIMEBase('application', 'zip')
+                              part.set_payload(attachment.read())
+                              
+                          encoders.encode_base64(part)
+                          part.add_header(
+                              'Content-Disposition',
+                              f'attachment; filename="{archive_name}"',
+                          )
+                          msg.attach(part)
+                          attachment_added = True
+                          print(f"✅ Attached report archive: {archive_name}")
+                      except Exception as e:
+                          print(f"⚠️  Failed to attach file: {e}")
+                          attachment_added = False
+                  else:
+                      print(f"⚠️  Archive too large ({file_size_mb:.2f} MB) for email attachment")
+                      attachment_added = False
+              elif not attach_reports:
+                  print("📋 Attachments disabled by ATTACH_REPORTS setting")
+              else:
+                  print("⚠️  No report archive created - no reports found")
+              
+              # Add download instructions to email body if no attachment
+              if not attachment_added and os.path.exists(archive_name):
+                  body += f"""
+              
+              📋 REPORT ACCESS:
+              Test reports are available via GitLab job artifacts:
+              
+              🔗 Direct access methods:
+              1. Job artifacts: {os.environ.get('CI_JOB_URL', 'N/A')}/artifacts/browse
+              2. Pipeline artifacts: {os.environ.get('CI_PIPELINE_URL', 'N/A')}/-/jobs/artifacts/{os.environ.get('CI_COMMIT_REF_NAME', 'main')}/browse?job=playwright-tests
+              3. Available for {os.environ.get('CI_DEFAULT_BRANCH', '7')} days
+              
+              📁 Report folders available:
+              - playwright-report/ (Playwright HTML report)
+              - monocart-report/ (Monocart coverage report)  
+              - allure-report/ (Allure test report)
+              """
+              
+              # Send email
+              print("🔐 Connecting to SMTP server...")
+              server = smtplib.SMTP(smtp_server, smtp_port)
+              server.starttls()
+              
+              print("🔐 Authenticating...")
+              server.login(email_from, email_password)
+              
+              print("📤 Sending email...")
+              text = msg.as_string()
+              server.sendmail(email_from, email_recipients, text)
+              server.quit()
+              
+              print(f"✅ Email sent successfully to: {', '.join(email_recipients)}")
+              
+          except smtplib.SMTPAuthenticationError as e:
+              print(f"❌ SMTP Authentication Failed: {str(e)}")
+              sys.exit(1)
+          except smtplib.SMTPException as e:
+              print(f"❌ SMTP Error: {str(e)}")
+              if "blocked because its content presents a potential security issue" in str(e):
+                  print("\n🔧 GMAIL SECURITY BLOCK DETECTED:")
+                  print("   Gmail blocked this email due to attachment security concerns.")
+                  print("   This commonly happens with:")
+                  print("   - ZIP files containing executable content")
+                  print("   - Large attachments")
+                  print("   - Files that trigger security scanners")
+                  
+                  # Try sending email without attachment
+                  try:
+                      print("\n🔄 Attempting to send notification without attachment...")
+                      msg_no_attach = MIMEMultipart()
+                      msg_no_attach['From'] = email_from
+                      msg_no_attach['To'] = ', '.join(email_recipients)
+                      msg_no_attach['Subject'] = email_subject + " (No Attachment - See Artifacts)"
+                      
+                      # Add note about missing attachment
+                      body_no_attach = body + """
+              
+              ⚠️  IMPORTANT: Email attachment was blocked by Gmail security.
+              Please access the test reports via GitLab job artifacts instead.
+              """
+                      msg_no_attach.attach(MIMEText(body_no_attach, 'plain'))
+                      
+                      server = smtplib.SMTP(smtp_server, smtp_port)
+                      server.starttls()
+                      server.login(email_from, email_password)
+                      server.sendmail(email_from, email_recipients, msg_no_attach.as_string())
+                      server.quit()
+                      
+                      print("✅ Notification email sent successfully (without attachment)")
+                      print("📋 Test reports are available in GitLab job artifacts")
+                      return  # Exit successfully
+                      
+                  except Exception as retry_e:
+                      print(f"❌ Failed to send email without attachment: {retry_e}")
+              else:
+                  print("\n🔧 SMTP TROUBLESHOOTING:")
+                  print("   - Check SMTP_SERVER and SMTP_PORT settings")
+                  print("   - Verify network connectivity")
+                  print("   - Check if firewall is blocking SMTP traffic")
+          except Exception as e:
+              print(f"❌ Unexpected error: {str(e)}")
+              print("\n🔧 GENERAL TROUBLESHOOTING:")
+              print("   - Verify all email configuration variables are set")
+              print("   - Check EMAIL_RECIPIENTS format (comma-separated)")
+              print("   - Ensure EMAIL_FROM is a valid email address")
+              sys.exit(1)
+
+      if __name__ == "__main__":
+          send_email()
+      EOF
+
+      # Execute the email script
+      python send_email.py
+
+    - echo "✅ Notification stage completed"
+  artifacts:
+    when: always
+    paths:
+      - "test-reports-*.zip"
+    expire_in: 1 week

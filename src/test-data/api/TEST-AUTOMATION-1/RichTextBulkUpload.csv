@@ -1,0 +1,73 @@
+notes_for_food_preparation,department,reporter,summary
+"{
+  ""type"": ""doc"",
+  ""content"": [
+    {
+      ""type"": ""heading"",
+      ""attrs"": {
+        ""level"": 2,
+        ""textAlign"": ""left""
+      },
+      ""content"": [
+        {
+          ""type"": ""text"",
+          ""text"": ""Connectivity Details""
+        }
+      ]
+    },
+    {
+      ""type"": ""paragraph"",
+      ""attrs"": {
+        ""textAlign"": ""left""
+      },
+      ""content"": [
+        {
+          ""type"": ""text"",
+          ""text"": ""This project requires a ""
+        },
+        {
+          ""type"": ""text"",
+          ""marks"": [
+            {
+              ""type"": ""italic""
+            }
+          ],
+          ""text"": ""stable, high-speed connection""
+        },
+        {
+          ""type"": ""text"",
+          ""text"": "". See the ""
+        },
+        {
+          ""type"": ""text"",
+          ""marks"": [
+            {
+              ""type"": ""underline""
+            },
+            {
+              ""type"": ""link"",
+              ""attrs"": {
+                ""href"": ""https://www.speedtest.net/"",
+                ""target"": ""_blank""
+              }
+            }
+          ],
+          ""text"": ""performance guidelines""
+        },
+        {
+          ""type"": ""text"",
+          ""text"": "" for more info.""
+        }
+      ]
+    },
+    {
+      ""type"": ""image"",
+      ""attrs"": {
+        ""src"": ""https://placehold.co/600x300/4287f5/ffffff?text=Network+Diagram"",
+        ""alt"": ""Network diagram placeholder"",
+        ""title"": ""Network Diagram"",
+        ""align"": ""center""
+      }
+    }
+  ]
+}",38d6f2e8-8e42-4a97-98e7-09aa8b8e19bc,2fa25063-4e4e-420b-bb84-d1adef69f98f,MAILSTOP KCES

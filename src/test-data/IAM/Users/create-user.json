@@ -1,0 +1,11 @@
+{
+  "validUser": {
+    "firstname": "AFirst",
+    "lastname": "ALast",
+    "username": "auto-user",
+    "email": "AutoFirst.AutoLast+test4@mavq.com",
+    "selectProfile": "Media Consultant",
+    "Manager": "Prudhvi Golla",
+    "isActive": true
+  }
+}

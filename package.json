@@ -1,0 +1,43 @@
+{
+  "name": "intellisuite",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:smoke": "npx playwright test -g \"@Smoke\"",
+    "test:sanity": "npx playwright test -g \"@Sanity\"",
+    "test:sanity:headed": "npx playwright test -g \"@Sanity\" --headed",
+    "report:generate": "allure generate allure-results --clean -o allure-report",
+    "report:serve": "allure serve allure-results",
+    "report:open": "allure open allure-report",
+    "lint": "eslint . --ext .ts",
+    "prettier-check": "prettier --check \"**/*.{ts,html,json,md}\"",
+    "format": "prettier --write \"**/*.{ts,html,json,md}\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@faker-js/faker": "9.8.0",
+    "@playwright/test": "^1.53.0",
+    "@types/node": "24.0.7",
+    "@typescript-eslint/eslint-plugin": "8.35.0",
+    "allure-playwright": "^2.0.0-beta.23",
+    "dotenv": "17.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-playwright": "2.2.0",
+    "husky": "^8.0.3",
+    "monocart-reporter": "2.9.21",
+    "playwright": "^1.53.0",
+    "prettier": "^3.3.0",
+    "tsconfig": "7.0.0",
+    "winston": "3.17.0",
+    "winston-daily-rotate-file": "5.0.0"
+  },
+  "devDependencies": {
+    "ortoni-report": "^4.0.0"
+  }
+}

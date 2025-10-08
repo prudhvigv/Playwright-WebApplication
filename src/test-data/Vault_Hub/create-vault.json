@@ -1,0 +1,10 @@
+{
+  "label": "Automation Vault",
+  "max_file_size": 26214400,
+  "total_storage": 21474836480,
+  "max_file_size_unit": "MB",
+  "total_storage_unit": "GB",
+  "allowed_file_types": ["PDF", "JPG", "PNG", "DOC", "WEBP"],
+  "allowed_profiles": [],
+  "description": "Automation Vault Desc"
+}

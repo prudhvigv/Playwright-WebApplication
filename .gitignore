@@ -1,0 +1,13 @@
+allure-report
+allure-results
+reports
+my-report
+node_modules
+package-lock.json
+test-results
+winston_Logs
+.env
+config.json
+index.html
+playwright-report
+monocart-report

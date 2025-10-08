@@ -1,0 +1,287 @@
+{
+  "CreateFieldType": {
+    "ShortText": {
+      "fieldName": "AutoShortText",
+      "fieldLabel": "AutoShortLabel",
+      "placeholder": "Test Short Text Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test Field Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "LongText": {
+      "fieldName": "AutoLongText",
+      "fieldLabel": "AutoLongLable",
+      "placeholder": "Test LongText Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test Field Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Email": {
+      "fieldName": "AutoEmail",
+      "fieldLabel": "AutoEmailLable",
+      "placeholder": "Test Email Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test Email Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Number": {
+      "fieldName": "AutoNumber",
+      "fieldLabel": "AutoNumberLable",
+      "placeholder": "Test Number Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test Number Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Phone_Number": {
+      "fieldName": "AutoNumber",
+      "fieldLabel": "AutoNumberLable",
+      "placeholder": "Test Number Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test Number Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "DateTime_Filed": {
+      "fieldName": "AutoDateTimeField",
+      "fieldLabel": "AutoDateTimeFieldLable",
+      "placeholder": "Test DateTime Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test DateTime Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Date_Field": {
+      "fieldName": "AutoDateField",
+      "fieldLabel": "AutoDateFieldLable",
+      "placeholder": "Test DateTime Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test DateTime Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Time_Field": {
+      "fieldName": "AutoTimeField",
+      "fieldLabel": "AutoTimeFieldLable",
+      "placeholder": "Test Time Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test Time Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Dropdown_Field": {
+      "fieldName": "AutoDropdownField",
+      "fieldLabel": "AutoDropdownFieldLable",
+      "placeholder": "Test Dropdown Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test Dropdown Description",
+      "protectField": false,
+      "fieldSearchable": false,
+      "List": {
+        "FieldLable1": "Label1",
+        "Value1": "Value 1"
+      }
+    },
+
+    "Boolean_Field": {
+      "fieldName": "AutoBooleanField",
+      "fieldLabel": "AutoBooleanFieldLable",
+      "placeholder": "Test Boolean Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test Boolean Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "MultiSelectDropdown_Field": {
+      "fieldName": "AutoMultiSelectField",
+      "fieldLabel": "AutoMultiSelectFieldLable",
+      "placeholder": "Test MultiSelect Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test MultiSelect Description",
+      "protectField": false,
+      "List": {
+        "FieldLable1": "Label1",
+        "Value1": "Value 1"
+      },
+      "DefaultSelection": true
+    },
+
+    "MultiSelectCheckbox_Field": {
+      "fieldName": "AutoMultiSelectCheckField",
+      "fieldLabel": "AutoMultiSelectCheckFieldLable",
+      "placeholder": "Test MultiSelectCheck Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test MultiSelectCheck Description",
+      "protectField": false,
+      "List": {
+        "FieldLable1": "Label1",
+        "Value1": "Value 1"
+      },
+      "DefaultSelection": true
+    },
+
+    "Image_Field": {
+      "fieldName": "AutoImageField",
+      "fieldLabel": "AutoImageFieldLable",
+      "placeholder": "Test Image Placeholder",
+      "helpText": "Test Help Text",
+      "fieldDescription": "Test Image Description",
+      "protectField": false
+    }
+  },
+
+  "EditFieldType": {
+    "ShortText": {
+      "fieldName": "",
+      "fieldLabel": "AutoEditShortLabel",
+      "placeholder": "Test Edit Short Text Placeholder",
+      "helpText": "Test Help Edit Text",
+      "fieldDescription": "Test Edit Field Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "LongText": {
+      "fieldName": "",
+      "fieldLabel": "EditLongLable",
+      "placeholder": "Test Edit LongText Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Edit Test Field Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Email": {
+      "fieldName": "",
+      "fieldLabel": "EditEmailLable",
+      "placeholder": "Test Edit Email Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Edit Email Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Number": {
+      "fieldName": "",
+      "fieldLabel": "EditNumberLable",
+      "placeholder": "Test Edit Number Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Edit Number Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Phone_Number": {
+      "fieldName": "",
+      "fieldLabel": "EditNumberLable",
+      "placeholder": "Test Edit Number Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Edit Number Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "DateTime_Filed": {
+      "fieldName": "",
+      "fieldLabel": "EditDateTimeFieldLable",
+      "placeholder": "Test Edit DateTime Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Edit DateTime Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Date_Field": {
+      "fieldName": "",
+      "fieldLabel": "EditDateFieldLable",
+      "placeholder": "Test Edit DateTime Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Edit DateTime Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Time_Field": {
+      "fieldName": "",
+      "fieldLabel": "EditTimeFieldLable",
+      "placeholder": "Test Edit Time Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Edit Time Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "Dropdown_Field": {
+      "fieldName": "",
+      "fieldLabel": "EditDropdownFieldLabel",
+      "placeholder": "Test Edit Dropdown Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Edit Dropdown Description",
+      "protectField": false,
+      "fieldSearchable": false,
+      "List": {
+        "FieldLable1": "Label1Edit",
+        "Value1": "Value 1Edit"
+      }
+    },
+
+    "Boolean_Field": {
+      "fieldName": "",
+      "fieldLabel": "EditBooleanFieldLable",
+      "placeholder": "Test Edit Boolean Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Boolean Description",
+      "protectField": false,
+      "fieldSearchable": false
+    },
+
+    "MultiSelectDropdown_Field": {
+      "fieldName": "",
+      "fieldLabel": "EditMultiSelectFieldLable",
+      "placeholder": "Test Edit MultiSelect Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Edit MultiSelect Description",
+      "protectField": false,
+      "List": {
+        "FieldLable1": "EditLabel1",
+        "Value1": "Edit Value 1"
+      },
+      "DefaultSelection": true
+    },
+
+    "MultiSelectCheckbox_Field": {
+      "fieldName": "",
+      "fieldLabel": "EditMultiSelectCheckFieldLable",
+      "placeholder": "Test Edit MultiSelectCheck Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Edit MultiSelectCheck Description",
+      "protectField": false,
+      "List": {
+        "FieldLable1": "Label1",
+        "Value1": "Value 1"
+      },
+      "DefaultSelection": true
+    },
+
+    "Image_Field": {
+      "fieldName": "",
+      "fieldLabel": "EditImageFieldLable",
+      "placeholder": "Test Edit Image Placeholder",
+      "helpText": "Test Edit Help Text",
+      "fieldDescription": "Test Edit Image Description",
+      "protectField": false
+    }
+  }
+}

@@ -1,0 +1,22 @@
+note,title,case_id,attachment
+"<!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <!-- Metatags for character set and responsive design -->
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    
+    <title>Basic Page</title>
+</head>
+<body>
+
+    <!-- Main heading -->
+    <h1>A Basic Heading</h1>
+    
+    <!-- A simple paragraph -->
+    <p>This is a simple paragraph. You can start writing your content here.</p>
+
+</body>
+</html>
+",progress day 3,API-1,
+<p>Issue confirmed on production environment. Log review points to malformed CSV input.<\/p>,progress day 2,API-2,

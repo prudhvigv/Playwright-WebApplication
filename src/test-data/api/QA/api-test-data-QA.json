@@ -1,0 +1,261 @@
+{
+  "config": {
+    "baseURL": "https://gateway.qa.intellisuite.internal.mavq.io/batch-service",
+    "tenant": "mavqqa-1",
+    "route": "qa.intellisuite",
+    "client_id": "prudhvi-api",
+    "client_secret": "Plft428eFkrdW3UlO4O9J4lrqxcWdjDW"
+  },
+  "caseTypes": {
+    "demo_test_data_casetype_1": "it_request_system"
+  },
+  "dataTables": {
+    "demo_test_datatable_1": "data_table_1"
+  },
+  "mappingRequests": {
+    "caseType1": {
+      "sourceType": "CSV",
+      "fields": [
+        {
+          "sourceField": "attachments",
+          "targetField": "attachment_table"
+        },
+        {
+          "sourceField": "field_radio",
+          "targetField": "fieldradio"
+        },
+        {
+          "sourceField": "field_boolean",
+          "targetField": "fieldboolean"
+        },
+        {
+          "sourceField": "field_email",
+          "targetField": "fieldemail"
+        },
+        {
+          "sourceField": "fieldchild",
+          "targetField": "fieldchild"
+        },
+        {
+          "sourceField": "reporter",
+          "targetField": "reporter"
+        },
+        {
+          "sourceField": "department",
+          "targetField": "department"
+        },
+        {
+          "sourceField": "subject",
+          "targetField": "fieldtext"
+        },
+        {
+          "sourceField": "age",
+          "targetField": "fieldnumber"
+        },
+        {
+          "sourceField": "balance",
+          "targetField": "fieldcurrency"
+        },
+        {
+          "sourceField": "interests",
+          "targetField": "fielddropdown"
+        },
+        {
+          "sourceField": "bio",
+          "targetField": "fieldlongtext"
+        },
+        {
+          "sourceField": "file1",
+          "targetField": "filefield1"
+        },
+        {
+          "sourceField": "file2",
+          "targetField": "filefield2"
+        },
+        {
+          "sourceField": "field_mdr",
+          "targetField": "fieldmdr"
+        },
+        {
+          "sourceField": "field_mch",
+          "targetField": "fieldmch"
+        },
+        {
+          "sourceField": "field_svlookup",
+          "targetField": "fieldsvlookup"
+        },
+        {
+          "sourceField": "field_date",
+          "targetField": "fielddate"
+        },
+        {
+          "sourceField": "field_datetime",
+          "targetField": "fielddatetime"
+        },
+        {
+          "sourceField": "field_time",
+          "targetField": "fieldtime"
+        },
+        {
+          "sourceField": "field_richtext",
+          "targetField": "fieldrichtext"
+        },
+        {
+          "sourceField": "parent",
+          "targetField": "fldparent2"
+        },
+        {
+          "sourceField": "asda",
+          "targetField": "asda"
+        },
+        {
+          "sourceField": "field_float",
+          "targetField": "fieldfloat"
+        }
+      ]
+    },
+    "dataTable1": {
+      "sourceType": "CSV",
+      "fields": [
+          {
+            "sourceField": "Personal Email",
+            "targetField": "personal_email"
+          },
+          {
+            "sourceField": "Age",
+            "targetField": "age"
+          },
+          {
+            "sourceField": "Middle Name",
+            "targetField": "customer_middle_name"
+          },
+          {
+            "sourceField": "Last Name",
+            "targetField": "customer_last_name"
+          },
+          {
+            "sourceField": "First Name",
+            "targetField": "customer_first_name"
+          }
+      ]
+    },
+    "notes1": {
+        "sourceType": "CSV",
+        "fields": [
+            {
+                "sourceField": "title",
+                "targetField": "title"
+            },
+            {
+                "sourceField": "note",
+                "targetField": "note"
+            },
+            {
+                "sourceField": "case_id",
+                "targetField": "case_id"
+            },
+            {
+                "sourceField": "attachment",
+                "targetField": "attachment"
+            }
+        ]
+    }
+         
+  },
+  "sampleData": {
+    "cases": [
+      {
+        "subject": "Test Case 1",
+        "age": 25,
+        "interests": "option_1",
+        "balance": 1500.50,
+        "bio": "This is a test case for automation testing",
+        "field_email": "test1@example.com",
+        "field_radio": "opt_1",
+        "field_boolean": true,
+        "field_float": 2.5,
+        "field_date": "2025-06-18T23:59:59Z",
+        "field_datetime": "2025-06-25T07:52:00.000Z",
+        "field_time": "10:30:00"
+      },
+      {
+        "subject": "Test Case 2",
+        "age": 30,
+        "interests": "option_2",
+        "balance": 2000.75,
+        "bio": "This is another test case for automation testing",
+        "field_email": "test2@example.com",
+        "field_radio": "opt_2",
+        "field_boolean": false,
+        "field_float": 3.7,
+        "field_date": "2025-07-18T23:59:59Z",
+        "field_datetime": "2025-07-25T08:30:00.000Z",
+        "field_time": "14:45:00"
+      }
+    ],
+    "notes": [
+      {
+        "case_id":"IT-70",
+        "title":"progress day 2",
+        "note":"<p>Issue confirmed on production environment. Log review points to malformed CSV input.<\/p>",
+        "attachment":null
+      },
+      {
+        "case_id":"IT-71",
+        "title":"progress day 3",
+        "note":"<p>Developer assigned to fix parser logic in import module (ETA: 2 days).<\/p>",
+        "attachment":null
+      }
+    ],
+    "datatable": [
+      {
+        "Personal Email": "testJSON@mavQ.com",
+        "Age": 10,
+        "Middle Name": "Bulk Middle",
+        "Last Name": "Bulk Last",
+        "First Name": "Bulk First"
+      },
+      {
+        "Personal Email": "test4JSON@mavQ.com",
+        "Age": 40,
+        "Middle Name": "Bulk Middle2",
+        "Last Name": "Bulk Last",
+        "First Name": "Bulk1 First"
+      },
+      {
+        "Personal Email": "test2JSON@mavQ.com",
+        "Age": 50,
+        "Middle Name": "Bulk Middle2",
+        "Last Name": "Bulk Last",
+        "First Name": "Bulk2 First"
+      },
+      {
+        "Personal Email": "test3JSON@mavQ.com",
+        "Age": 71,
+        "Middle Name": "Bulk Middle3",
+        "Last Name": "Bulk Last",
+        "First Name": "Bulk3 First"
+      }
+    ]
+  },
+
+  "negativeScenarios": {
+    "datatable": [
+      {
+        "Personal Email": "test@mavQ.com",
+        "Age": "No",
+        "Middle Name": "Bulk Middle",
+        "Last Name": "Bulk Last",
+        "First Name": "Bulk First"
+      }
+    ],
+    "notes": [
+      {
+        "case_11id":"IT11-10",
+        "title":"progress day 2",
+        "note":"<p>Issue confirmed on production environment. Log review points to malformed CSV input.<\/p>",
+        "attachment":null
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+[
+    {
+      "Personal Email": "testJSON@mavQ.com",
+      "Age": 10,
+      "Middle Name": "Bulk Middle",
+      "Last Name": "Bulk Last",
+      "First Name": "Bulk First"
+    },
+    {
+      "Personal Email": "test4JSON@mavQ.com",
+      "Age": 40,
+      "Middle Name": "Bulk Middle2",
+      "Last Name": "Bulk Last",
+      "First Name": "Bulk1 First"
+    },
+    {
+      "Personal Email": "test2JSON@mavQ.com",
+      "Age": 50,
+      "Middle Name": "Bulk Middle2",
+      "Last Name": "Bulk Last",
+      "First Name": "Bulk2 First"
+    },
+    {
+      "Personal Email": "test3JSON@mavQ.com",
+      "Age": 71,
+      "Middle Name": "Bulk Middle3",
+      "Last Name": "Bulk Last",
+      "First Name": "Bulk3 First"
+    }
+  ]
